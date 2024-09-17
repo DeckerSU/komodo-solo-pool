@@ -1,5 +1,28 @@
 require('dotenv').config();
 
+const os = require('os');
+
+function displayNetworkInfo() {
+  const interfaces = os.networkInterfaces();
+  console.log('Network Interfaces:');
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      // Skip loopback and non-IPv4 addresses
+      if (iface.family !== 'IPv4' || iface.internal) {
+        continue;
+      }
+      console.log(`Interface: ${name}`);
+      console.log(`  IP Address : ${iface.address}`);
+      console.log(`  Netmask    : ${iface.netmask}`);
+      console.log(`  CIDR       : ${iface.cidr}`);
+      console.log('');
+    }
+  }
+}
+
+displayNetworkInfo();
+
+// Ensure all var is set
 const requiredEnvVars = [
     'COIN',
     'REWARDS_ADDRESS',

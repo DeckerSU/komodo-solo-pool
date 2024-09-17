@@ -1,6 +1,22 @@
 # Use the Node.js 18 Alpine image as the base
 FROM node:18-alpine3.20
 
+# Install necessary packages:
+# - git: To clone repositories from GitHub
+# - python3: Python 3 required by node-gyp@10.2.0
+# - make: Build tool required by node-gyp
+# - g++: C++ compiler required by node-gyp
+# - libsodium-dev: Development files for libsodium (provides sodium.h)
+# - boost-dev: Boost development files (includes boost-system)
+RUN apk add --no-cache \
+    git \
+    python3 \
+    make \
+    g++ \
+    libsodium-dev \
+    boost-dev \
+    && ln -sf python3 /usr/bin/python  # Symlink python command to python3
+
 # Set the working directory
 WORKDIR /app
 
