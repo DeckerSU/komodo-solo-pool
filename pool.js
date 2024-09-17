@@ -51,53 +51,51 @@ var myCoin = {
     "txfee": 0.00005
 };
 
-var pool = Stratum.createPool({
-
+var poolOptions = {
     "coin": myCoin,
-
     "address": process.env.REWARDS_ADDRESS, // Address to where block rewards are given
-
     "jobRebroadcastTimeout": 55,
     "connectionTimeout": 600,
     "emitInvalidBlockHashes": false,
     "tcpProxyProtocol": false,
-
     "banning": {
-        "enabled": false,
-        "time": 600,
-        "invalidPercent": 50,
-        "checkThreshold": 500,
-        "purgeInterval": 300
+      "enabled": false,
+      "time": 600,
+      "invalidPercent": 50,
+      "checkThreshold": 500,
+      "purgeInterval": 300
     },
-
     "ports": {
-        [process.env.STRATUM_HIGH_DIFF_PORT]: {
-            "tls": false,
-            "diff": 272
-        },
-        [process.env.STRATUM_LOW_DIFF_PORT]: {
-            "tls": false,
-            "diff": 1
-        },
+      [process.env.STRATUM_HIGH_DIFF_PORT]: {
+        "tls": false,
+        "diff": 272
+      },
+      [process.env.STRATUM_LOW_DIFF_PORT]: {
+        "tls": false,
+        "diff": 1
+      },
     },
-
     "daemons": [
-        {
-            "host": process.env.DAEMON_HOST,
-            "port": parseInt(process.env.DAEMON_RPC_PORT),
-            "user": process.env.DAEMON_RPC_USER,
-            "password": process.env.DAEMON_RPC_PASS
-        }
-    ],
-
-    "p2p": {
-        "enabled": false,
+      {
         "host": process.env.DAEMON_HOST,
-        "port": parseInt(process.env.DAEMON_P2P_PORT),
-        "disableTransactions": true
+        "port": parseInt(process.env.DAEMON_RPC_PORT),
+        "user": process.env.DAEMON_RPC_USER,
+        "password": process.env.DAEMON_RPC_PASS
+      }
+    ],
+    "p2p": {
+      "enabled": false,
+      "host": process.env.DAEMON_HOST,
+      "port": parseInt(process.env.DAEMON_P2P_PORT),
+      "disableTransactions": true
     }
+  };
 
-}, function(ip, port, workerName, password, callback){
+if (process.env.USE_DAEMON_COINBASE === 'true') {
+    poolOptions.useDaemonCoinbase = true;
+}
+
+var pool = Stratum.createPool(poolOptions, function(ip, port, workerName, password, callback){
     console.log("Authorize " + workerName + ":" + password + "@" + ip);
     callback({
         error: null,
