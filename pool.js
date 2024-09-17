@@ -54,6 +54,7 @@ var myCoin = {
 var poolOptions = {
     "coin": myCoin,
     "address": process.env.REWARDS_ADDRESS, // Address to where block rewards are given
+    "blockRefreshInterval": 1000, // How often to poll RPC daemons for new blocks, in milliseconds
     "jobRebroadcastTimeout": 55,
     "connectionTimeout": 600,
     "emitInvalidBlockHashes": false,
