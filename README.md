@@ -55,8 +55,8 @@ Create a `.env` file in the project root directory with the following content:
 
 ```dotenv
 # Coin and Pool Settings
-COIN=Komodo
-ADDRESS=YOUR_WALLET_ADDRESS
+COIN=KMD
+REWARDS_ADDRESS=YOUR_WALLET_ADDRESS
 
 # Stratum Ports
 STRATUM_HIGH_DIFF_PORT=3333
@@ -68,9 +68,32 @@ DAEMON_RPC_PORT=YOUR_DAEMON_RPC_PORT
 DAEMON_RPC_USER=YOUR_DAEMON_RPC_USER
 DAEMON_RPC_PASS=YOUR_DAEMON_RPC_PASSWORD
 DAEMON_P2P_PORT=YOUR_DAEMON_P2P_PORT
+USE_DAEMON_COINBASE=false
 ```
 
+- **`COIN`** - Specifies a unique identifier for the cryptocurrency that the pool will mine. This can be any name, such as `KMD` or `Komodo`, regardless of how you choose to specify it.
+
+- **`REWARDS_ADDRESS`** - The wallet address from the daemon's wallet where mining rewards will be deposited.
+
+- **`STRATUM_HIGH_DIFF_PORT`** - Port number with high local difficulty for big ASIC farms or services like Nicehash.
+
+- **`STRATUM_LOW_DIFF_PORT`** - Port number with low local difficulty, for use with a single ASIC or GPU.
+
+- **`DAEMON_HOST`** - The hostname or IP address where the cryptocurrency daemon is running. Use `127.0.0.1` if the daemon is on the same machine (dHost Networking), or `host.docker.internal` in case of Bridge Networking. See below.
+
+- **`DAEMON_RPC_PORT`** - The port number for the daemon's RPC (Remote Procedure Call) interface. This port allows the pool to communicate with the daemon for tasks like fetching blockchain data and submitting blocks.
+
+- **`DAEMON_RPC_USER`** - The username for authenticating with the daemon's RPC interface.
+
+- **`DAEMON_RPC_PASS`** - The password for authenticating with the daemon's RPC interface.
+
+- **`DAEMON_P2P_PORT`** - The port number used by the daemon for peer-to-peer (P2P) network communication. This port facilitates communication with other nodes in the cryptocurrency network.
+
+- **`USE_DAEMON_COINBASE`** is a parameter (when set to true) that allows the pool to derive the coinbase from the daemon's block template. Regardless of the `REWARDS_ADDRESS` you set, the coinbase will not be constructed by the pool itself, but will instead be obtained from the daemon's `getblocktemplate` RPC. This is particularly useful for mining CC-enabled chains, such as MCL (Marmara Credit Loops). Using this option in MCL will help you mine activated blocks.
+
 **Replace the placeholders** with your actual configuration values.
+
+
 
 ## Building the Docker Image
 
